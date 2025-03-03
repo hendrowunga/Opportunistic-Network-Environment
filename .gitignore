@@ -29,9 +29,9 @@ replay_pid*
 .gradle/**/taskHistory/
 .gradle/**/gradleApp/
 
-# Gradle wrapper files
-gradle/wrapper/gradle-wrapper.jar
-gradle/wrapper/gradle-wrapper.properties
+## Gradle wrapper files
+#gradle/wrapper/gradle-wrapper.jar
+#gradle/wrapper/gradle-wrapper.properties
 
 # ========== IDE / EDITOR ==========
 # IntelliJ IDEA
@@ -55,7 +55,7 @@ nbproject/private/
 .nfs*
 
 # Windows batch and PowerShell
-*.bat
+#*.bat
 *.cmd
 *.ps1
 
