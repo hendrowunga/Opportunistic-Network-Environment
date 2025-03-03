@@ -133,7 +133,7 @@ public class WaveRouter extends ActiveRouter {
 	public Message messageTransferred(String id, DTNHost from) {
 		Message m = super.messageTransferred(id, from);
 		/* store received message IDs for immunity */
-		this.recentMessages.put(m.getId(), new Double(SimClock.getTime()));
+		this.recentMessages.put(m.getId(), Double.valueOf(SimClock.getTime()));
 		this.custodyMessages.put(id, SimClock.getTime());
 		return m;
 	}
