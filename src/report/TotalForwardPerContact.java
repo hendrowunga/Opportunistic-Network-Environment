@@ -5,6 +5,7 @@ import core.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class TotalForwardPerContact extends Report implements MessageListener,ConnectionListener, UpdateListener {
 
@@ -14,12 +15,13 @@ public class TotalForwardPerContact extends Report implements MessageListener,Co
     private Map<Integer, Integer> nrofForwardRecords;
     private int nrofContacts;
     private static final String NROF_CONTACT_INTERVAL = "perTotalContact";
-    private static final int DEFAULT_CONTACT_COUNT = 600;
+    private static final int DEFAULT_CONTACT_COUNT = 500;
 
     public TotalForwardPerContact() {
         init();
-        if (getSettings().contains(NROF_CONTACT_INTERVAL)) {
-            interval = getSettings().getInt(NROF_CONTACT_INTERVAL);
+        Settings s = getSettings();
+        if (s.contains(NROF_CONTACT_INTERVAL)) {
+            interval = s.getInt(NROF_CONTACT_INTERVAL);
         } else {
             interval = DEFAULT_CONTACT_COUNT;
         }
@@ -39,7 +41,8 @@ public class TotalForwardPerContact extends Report implements MessageListener,Co
     @Override
     public void done() {
         String output = "Contacts\tTotalForwards\n";
-        for (Map.Entry<Integer, Integer> entry : nrofForwardRecords.entrySet()) {
+        Map<Integer,Integer>sortedForwards=new TreeMap<>(nrofForwardRecords);
+        for (Map.Entry<Integer, Integer> entry : sortedForwards.entrySet()) {
             output += entry.getKey() + "\t" + entry.getValue() + "\n";
         }
         write(output);
