@@ -1,12 +1,10 @@
 package report;
 
-import core.ConnectionListener;
-import core.DTNHost;
-import core.Message;
-import core.MessageListener;
+import core.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class OverheadPerContact extends Report implements MessageListener, ConnectionListener {
 
@@ -17,14 +15,14 @@ public class OverheadPerContact extends Report implements MessageListener, Conne
     private int nrofDelivered; // Total Messages Delivered
     private Map<Integer, Double> nrofOverhead;
     private static final String NROF_CONTACT_INTERVAL = "perTotalContact";
-    private static final int DEFAULT_CONTACT_COUNT = 600;
+    private static final int DEFAULT_CONTACT_COUNT = 500;
 
     // Constructor:
     public OverheadPerContact() {
         init();
-        if (getSettings().contains(NROF_CONTACT_INTERVAL)) {
-            interval = getSettings().getInt(NROF_CONTACT_INTERVAL);
-
+        Settings s = getSettings();
+        if (s.contains(NROF_CONTACT_INTERVAL)) {
+            interval = s.getInt(NROF_CONTACT_INTERVAL);
         } else {
             interval = DEFAULT_CONTACT_COUNT;
         }
@@ -58,7 +56,8 @@ public class OverheadPerContact extends Report implements MessageListener, Conne
     @Override
     public void done() {
         String output = "Contact\tOverhead\n";
-        for (Map.Entry<Integer, Double> entry : nrofOverhead.entrySet()) {
+        TreeMap<Integer,Double>sortedOverhead=new TreeMap<>(nrofOverhead);
+        for (Map.Entry<Integer, Double> entry : sortedOverhead.entrySet()) {
             Integer key = entry.getKey();
             Double value = entry.getValue();
             output += key + "\t " + value + "\n";

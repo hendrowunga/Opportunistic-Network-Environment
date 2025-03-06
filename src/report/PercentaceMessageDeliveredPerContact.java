@@ -1,12 +1,10 @@
 package report;
 
-import core.ConnectionListener;
-import core.DTNHost;
-import core.Message;
-import core.MessageListener;
+import core.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class PercentaceMessageDeliveredPerContact extends Report implements MessageListener, ConnectionListener {
     public static final String NROF_CONTACT_INTERVAL = "perTotalContact";
@@ -21,9 +19,9 @@ public class PercentaceMessageDeliveredPerContact extends Report implements Mess
     // Constructor:
     public PercentaceMessageDeliveredPerContact() {
         init();
-        if (getSettings().contains(NROF_CONTACT_INTERVAL)) {
-            interval = getSettings().getInt(NROF_CONTACT_INTERVAL);
-
+        Settings s = getSettings();
+        if (s.contains(NROF_CONTACT_INTERVAL)) {
+            interval = s.getInt(NROF_CONTACT_INTERVAL);
         } else {
             interval = DEFAULT_CONTACT_COUNT;
         }
@@ -82,7 +80,8 @@ public class PercentaceMessageDeliveredPerContact extends Report implements Mess
     @Override
     public void done() {
         String output = "Contact\tNrofDelivered\n";
-        for (Map.Entry<Integer, Double> entry : nrofDeliver.entrySet()) {
+        Map<Integer,Double>sortedDelivery=new TreeMap<>(nrofDeliver);
+        for (Map.Entry<Integer, Double> entry : sortedDelivery.entrySet()) {
             Integer key = entry.getKey();
             Double value = entry.getValue();
             output += key + "\t" + value + "\n";
