@@ -2,10 +2,7 @@ package report;
 
 import core.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LatencyPerContact extends Report implements MessageListener, ConnectionListener {
 
@@ -16,12 +13,13 @@ public class LatencyPerContact extends Report implements MessageListener, Connec
     private Map<String, Double> creationTimes;
     private List<Double> latencies;
     public static final String NROF_CONTACT_INTERVAL = "perTotalContact";
-    public static final int DEFAULT_CONTACT_COUNT = 600;
+    public static final int DEFAULT_CONTACT_COUNT = 500;
 
     public LatencyPerContact() {
         init();
-        if (getSettings().contains(NROF_CONTACT_INTERVAL)) {
-            interval = getSettings().getInt(NROF_CONTACT_INTERVAL);
+        Settings s = getSettings();
+        if (s.contains(NROF_CONTACT_INTERVAL)) {
+            interval = s.getInt(NROF_CONTACT_INTERVAL);
         } else {
             interval = DEFAULT_CONTACT_COUNT;
         }
@@ -90,15 +88,45 @@ public class LatencyPerContact extends Report implements MessageListener, Connec
     @Override
     public void done() {
         String statsText = "Contact\tLatencies\n";
-        for (Map.Entry<Integer, String> entry : nrofLatency.entrySet()) {
+        Map<Integer, String> sortedLatency = new TreeMap<>(nrofLatency);
+        for (Map.Entry<Integer, String> entry : sortedLatency.entrySet()) {
             Integer key = entry.getKey();
             String value = entry.getValue();
             statsText += key + "\t" + value + "\n";
         }
+
         write(statsText);
         super.done();
-    }
 
-    ;
+    /*
+    // Menggunakan HashMap (TIDAK MENJAMIN URUTAN)
+    // Jika hanya butuh penyimpanan cepat tanpa peduli urutan
+    Map<Integer, String> hashLatency = new HashMap<>(nrofLatency);
+    for (Map.Entry<Integer, String> entry : hashLatency.entrySet()) {
+        Integer key = entry.getKey();
+        String value = entry.getValue();
+        statsText += key + "\t" + value + "\n";
+    }
+    */
+
+    /*
+    // Menggunakan LinkedHashMap untuk mempertahankan urutan input atau descending
+    Map<Integer, String> linkedLatency = new LinkedHashMap<>();
+    sortedLatency.entrySet()
+        .stream()
+        .sorted((a, b) -> b.getKey().compareTo(a.getKey())) // Membalik urutan (descending)
+        .forEachOrdered(x -> linkedLatency.put(x.getKey(), x.getValue()));
+
+    // Iterasi dalam urutan descending
+    statsText += "\nDescending Order:\n";
+    for (Map.Entry<Integer, String> entry : linkedLatency.entrySet()) {
+        Integer key = entry.getKey();
+        String value = entry.getValue();
+        statsText += key + "\t" + value + "\n";
+    }
+    */
+
+
+    }
 }
 

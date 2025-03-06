@@ -4,19 +4,17 @@
  */
 package report;
 
-import core.ConnectionListener;
-import core.DTNHost;
-import core.Message;
-import core.MessageListener;
+import core.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 
 public class MessageDeliveryReportPerContact extends Report implements MessageListener, ConnectionListener {
 
-    private static final String NROFCONTACT_INTERVAL = "perTotalContact";
-    public static final int DEFAULT_CONTACT_COUNT = 600;
+    private static final String NROF_CONTACT_INTERVAL = "perTotalContact";
+    public static final int DEFAULT_CONTACT_COUNT = 500;
     private int lastRecord;
     private int interval;
     private int nrofContacts;
@@ -29,8 +27,9 @@ public class MessageDeliveryReportPerContact extends Report implements MessageLi
     // Constructor: Menentukan interval berdasarkan konfigurasi
     public MessageDeliveryReportPerContact() {
         init();
-        if (getSettings().contains(NROFCONTACT_INTERVAL)) {
-            interval = getSettings().getInt(NROFCONTACT_INTERVAL);
+        Settings s = getSettings();
+        if (s.contains(NROF_CONTACT_INTERVAL)) {
+            interval = s.getInt(NROF_CONTACT_INTERVAL);
         } else {
             interval = DEFAULT_CONTACT_COUNT;
         }
@@ -103,8 +102,9 @@ public class MessageDeliveryReportPerContact extends Report implements MessageLi
 //        write("Total Pesan yang Diterima: " + nrofDelivered);
 //        write("contact\tNrofDelivered\tDeliveryRatio (%)");
         String statsText = "Contact\tNrofDelivered\n";
+        Map<Integer,Integer>sortedDelivery=new TreeMap<>(nrofDeliver);
 
-        for (Map.Entry<Integer, Integer> entry : nrofDeliver.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : sortedDelivery.entrySet()) {
             Integer key = entry.getKey();
             Integer value = entry.getValue();
 //            Double ratio = deliveryRatioPerContact.getOrDefault(key, 0.0);

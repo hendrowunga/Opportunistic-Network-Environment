@@ -65,7 +65,13 @@ Thumbs.db
 # ========== SIMULATION / REPORT FILES ==========
 # Simulation report files
 reports/*.txt
-reports/*/*.txt
+reports/epidemic/*.txt
+reports/prophet/manusia/*.txt
+reports/prophet/randomwaypoint/*.txt
+reports/sprayandwait/manusia/*.txt
+reports/sprayandwait/randomwaypoint/*.txt
+reports/epidemic/manusia/*.txt
+reports/epidemic/randomwaypoint/*.txt
 config/*/*.txt
 
 # Javadoc

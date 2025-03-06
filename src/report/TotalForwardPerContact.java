@@ -5,20 +5,23 @@ import core.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
-public class TotalForwardPerContact extends Report implements MessageListener, UpdateListener {
+public class TotalForwardPerContact extends Report implements MessageListener,ConnectionListener, UpdateListener {
 
     private double lastRecord;
     private int interval;
     private Map<DTNHost, Integer> nrofForwards;
-    private Map<Double, Integer> nrofForwardRecords;
+    private Map<Integer, Integer> nrofForwardRecords;
+    private int nrofContacts;
     private static final String NROF_CONTACT_INTERVAL = "perTotalContact";
-    private static final int DEFAULT_CONTACT_COUNT = 600;
+    private static final int DEFAULT_CONTACT_COUNT = 500;
 
     public TotalForwardPerContact() {
         init();
-        if (getSettings().contains(NROF_CONTACT_INTERVAL)) {
-            interval = getSettings().getInt(NROF_CONTACT_INTERVAL);
+        Settings s = getSettings();
+        if (s.contains(NROF_CONTACT_INTERVAL)) {
+            interval = s.getInt(NROF_CONTACT_INTERVAL);
         } else {
             interval = DEFAULT_CONTACT_COUNT;
         }
@@ -30,6 +33,7 @@ public class TotalForwardPerContact extends Report implements MessageListener, U
         nrofForwards = new HashMap<>();
         this.lastRecord = 0;
         this.interval = 0;
+        this.nrofContacts=0;
         nrofForwardRecords = new HashMap<>();
     }
 
@@ -37,7 +41,8 @@ public class TotalForwardPerContact extends Report implements MessageListener, U
     @Override
     public void done() {
         String output = "Contacts\tTotalForwards\n";
-        for (Map.Entry<Double, Integer> entry : nrofForwardRecords.entrySet()) {
+        Map<Integer,Integer>sortedForwards=new TreeMap<>(nrofForwardRecords);
+        for (Map.Entry<Integer, Integer> entry : sortedForwards.entrySet()) {
             output += entry.getKey() + "\t" + entry.getValue() + "\n";
         }
         write(output);
@@ -47,14 +52,18 @@ public class TotalForwardPerContact extends Report implements MessageListener, U
 
     @Override
     public void updated(List<DTNHost> hosts) {
-        if (SimClock.getTime() - lastRecord >= interval) {
-            int totalCount = 0;
-            for (Map.Entry<DTNHost, Integer> entry : nrofForwards.entrySet()) {
-                Integer value = entry.getValue();
-                totalCount += value;
+        if (nrofContacts - lastRecord >= interval) {
+            // Menghitung total forwards dengan cara sederhana (loop biasa)
+            int totalForwardCount = 0;
+            for (Integer count : nrofForwards.values()) {
+                totalForwardCount += count; // Menjumlahkan semua forward dari setiap host
             }
-            nrofForwardRecords.put(lastRecord, totalCount);
-            lastRecord = SimClock.getTime();
+
+            // Simpan hasil ke dalam record
+            nrofForwardRecords.put(nrofContacts, totalForwardCount);
+
+            // Update lastRecord ke jumlah total kontak saat ini
+            lastRecord = nrofContacts;
         }
     }
 
@@ -81,11 +90,19 @@ public class TotalForwardPerContact extends Report implements MessageListener, U
     @Override
     public void messageTransferred(Message m, DTNHost from, DTNHost to, boolean firstDelivery) {
         if (firstDelivery) {
-            if (nrofForwards.containsKey(from)) {
-                nrofForwards.put(from, nrofForwards.get(from) + 1);
-            } else {
-                nrofForwards.put(from, 1);
-            }
+            // Tambahkan jumlah forward untuk host 'from'
+            nrofForwards.put(from, nrofForwards.getOrDefault(from, 0) + 1);
         }
+    }
+
+    @Override
+    public void hostsConnected(DTNHost host1, DTNHost host2) {
+        nrofContacts++;
+
+    }
+
+    @Override
+    public void hostsDisconnected(DTNHost host1, DTNHost host2) {
+
     }
 }

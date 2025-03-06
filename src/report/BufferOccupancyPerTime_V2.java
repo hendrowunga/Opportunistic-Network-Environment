@@ -16,7 +16,7 @@ import core.UpdateListener;
  * Laporan ini mencatat snapshot penggunaan buffer pada interval waktu tertentu,
  * dan memberikan laporan akhir yang menunjukkan penggunaan buffer setiap node di akhir simulasi.
  */
-public class BufferOccupancyReport_v2 extends Report implements UpdateListener {
+public class BufferOccupancyPerTime_V2 extends Report implements UpdateListener {
 
 	public static final String BUFFER_REPORT_INTERVAL = "occupancyInterval";
 	public static final int DEFAULT_BUFFER_REPORT_INTERVAL = 5;
@@ -25,7 +25,7 @@ public class BufferOccupancyReport_v2 extends Report implements UpdateListener {
 	private Map<DTNHost, LinkedList<Double>> bufferOccupancyHistory = new HashMap<>();
 	private static final int MAX_HISTORY = 5; // Batasi jumlah history yang disimpan
 
-	public BufferOccupancyReport_v2() {
+	public BufferOccupancyPerTime_V2() {
 		super();
 		Settings settings = getSettings();
 		interval = settings.getInt(BUFFER_REPORT_INTERVAL, DEFAULT_BUFFER_REPORT_INTERVAL);
