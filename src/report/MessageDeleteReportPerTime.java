@@ -77,26 +77,58 @@ public class MessageDeleteReportPerTime extends Report implements MessageListene
 
     @Override
     public void done() {
-        write("Time\tHost\tDrop\tTotal Drop");
-
-        // Urutkan berdasarkan waktu secara ascending
-        List<Integer> sortedTimeSlots = new ArrayList<>(deleteMessagePerTime.keySet());
-        Collections.sort(sortedTimeSlots);
-
-        // Loop melalui setiap slot waktu yang telah tercatat
-        for (int timeSlot : sortedTimeSlots) {
-            Map<DTNHost, Integer> deleteMessage = deleteMessagePerTime.get(timeSlot);
-            int totalDropped = droppedMessagesPerTime.getOrDefault(timeSlot, 0); // Ambil jumlah pesan yang di-drop
-
-            // Urutkan host berdasarkan ID secara ascending
-            List<DTNHost> sortedHosts = new ArrayList<>(deleteMessage.keySet());
-            sortedHosts.sort(Comparator.comparingInt(DTNHost::getAddress));
-
-            for (DTNHost host : sortedHosts) {
-                write(timeSlot * interval + "\t" + host + "\t\t" + deleteMessage.get(host) + "\t\t" + totalDropped);
-            }
+        StringBuilder output=new StringBuilder("Time\tHost\tDrop\tTotalDrop\n");
+        List<Integer>sortedTimeSlots=new ArrayList<>(deleteMessagePerTime.keySet());
+        // Jika data > 10.000,gunkan prallel sort agar lebih cepat
+        if(sortedTimeSlots.size()>10_000){
+//            sortedTimeSlots.parallelStream().sorted().toList(); // Ascending
+            sortedTimeSlots.parallelStream().sorted(Comparator.reverseOrder()).toList(); // descending
+        }else{
+//            sortedTimeSlots.sort(Integer::compare);
+            sortedTimeSlots.sort(Comparator.reverseOrder());
         }
+        for (int timeSlot:sortedTimeSlots){
+            Map<DTNHost,Integer> deleteMessage=deleteMessagePerTime.get(timeSlot);
+            int totalDropped=droppedMessagesPerTime.getOrDefault(timeSlot,0);
+            List<DTNHost> sortedHosts=new ArrayList<>(deleteMessage.keySet());
+            // Sorting berdasarkan jumlah data
+            if(sortedHosts.size()>10_000){
+                sortedHosts=sortedHosts.parallelStream()
+//                .sorted(Comparator.comparingInt(DTNHost::getAddress)).toList(); // Sort ascending
+                        .sorted(Comparator.comparingInt(DTNHost::getAddress).reversed()).toList(); // Descending
 
+            }else{
+//                sortedHosts.sort(Comparator.comparingInt(DTNHost::getAddress));
+                sortedHosts.sort(Comparator.comparingInt(DTNHost::getAddress).reversed());
+            }
+            sortedHosts.forEach(host-> output.append(timeSlot*interval).append("\t")
+                    .append(host).append("\t\t")
+                    .append(deleteMessage.get(host)).append("\t\t")
+                    .append(totalDropped).append("\n"));
+        }
+        write(output.toString());
         super.done();
     }
 }
+//        write("Time\tHost\tDrop\tTotal Drop");
+//
+//        // Urutkan berdasarkan waktu secara ascending
+//        List<Integer> sortedTimeSlots = new ArrayList<>(deleteMessagePerTime.keySet());
+//        Collections.sort(sortedTimeSlots);
+//
+//        // Loop melalui setiap slot waktu yang telah tercatat
+//        for (int timeSlot : sortedTimeSlots) {
+//            Map<DTNHost, Integer> deleteMessage = deleteMessagePerTime.get(timeSlot);
+//            int totalDropped = droppedMessagesPerTime.getOrDefault(timeSlot, 0); // Ambil jumlah pesan yang di-drop
+//
+//            // Urutkan host berdasarkan ID secara ascending
+//            List<DTNHost> sortedHosts = new ArrayList<>(deleteMessage.keySet());
+//            sortedHosts.sort(Comparator.comparingInt(DTNHost::getAddress));
+//
+//            for (DTNHost host : sortedHosts) {
+//                write(timeSlot * interval + "\t" + host + "\t\t" + deleteMessage.get(host) + "\t\t" + totalDropped);
+//            }
+//        }
+//
+//        super.done();
+//    }
