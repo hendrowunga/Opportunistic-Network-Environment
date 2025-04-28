@@ -83,7 +83,7 @@ public class BusControlSystem {
 	 * @return The bus control system with the provided ID
 	 */
 	public static BusControlSystem getBusControlSystem(int systemID) {
-		Integer id = Integer.valueOf(systemID);
+		Integer id = new Integer(systemID);
 
 		if (systems.containsKey(id)) {
 			return systems.get(id);

@@ -114,7 +114,7 @@ public class BinaryEventsReader implements ExternalEventsReader {
 		out = new ObjectOutputStream(fos);
 
 		// store the number of events
-		out.writeObject(Integer.valueOf(events.size()));
+		out.writeObject(new Integer(events.size()));
 
 		// store events
 		for (ExternalEvent ee : events) {

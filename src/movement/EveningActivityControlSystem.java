@@ -52,7 +52,7 @@ public class EveningActivityControlSystem {
 	 * @param eveningMovement activity movement
 	 */
 	public void addEveningActivityNode(EveningActivityMovement eveningMovement) {
-		eveningActivityNodes.put(Integer.valueOf(eveningMovement.getID()),
+		eveningActivityNodes.put(new Integer(eveningMovement.getID()),
 				eveningMovement);
 	}
 
@@ -73,7 +73,7 @@ public class EveningActivityControlSystem {
 	 */
 	public EveningTrip getEveningInstructions(int eveningActivityNodeID) {
 		EveningActivityMovement eveningMovement = eveningActivityNodes.get(
-				Integer.valueOf(eveningActivityNodeID));
+				new Integer(eveningActivityNodeID));
 		if (eveningMovement != null) {
 			int index = eveningActivityNodeID % meetingSpots.size();
 			if (nextTrips[index] == null) {
@@ -127,12 +127,12 @@ public class EveningActivityControlSystem {
 	 */
 	public static EveningActivityControlSystem getEveningActivityControlSystem(
 			int id) {
-		if (controlSystems.containsKey(Integer.valueOf(id))) {
-			return controlSystems.get(Integer.valueOf(id));
+		if (controlSystems.containsKey(new Integer(id))) {
+			return controlSystems.get(new Integer(id));
 		} else {
 			EveningActivityControlSystem scs =
 				new EveningActivityControlSystem(id);
-			controlSystems.put(Integer.valueOf(id), scs);
+			controlSystems.put(new Integer(id), scs);
 			return scs;
 		}
 	}
