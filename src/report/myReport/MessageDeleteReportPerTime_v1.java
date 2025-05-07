@@ -2,12 +2,13 @@
  * Copyright 2024 [Your Name/Organization]
  * Released under GPLv3. See LICENSE.txt for details.
  */
-package report;
+package report.myReport;
 
 import core.DTNHost;
 import core.Message;
 import core.MessageListener;
 import core.SimClock;
+import report.Report;
 
 import java.util.*;
 

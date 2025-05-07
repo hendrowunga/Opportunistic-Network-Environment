@@ -1,15 +1,10 @@
-/*
- * @(#)DegreeCentrality.java
- *
- * Copyright 2010 by University of Pittsburgh, released under GPLv3.
- * 
- */
 package routing.community;
+
+import core.DTNHost;
+import core.Settings;
 
 import java.util.List;
 import java.util.Map;
-
-import core.*;
 
 /**
  * <p>
@@ -24,12 +19,12 @@ import core.*;
  * as the total number of unique contacts (degree) the node has had over the
  * entire simulation.
  * </p>
- * 
+ *
  * <pre>
  * \@inproceedings{1374652,
  *	Address = {New York, NY, USA},
  *	Author = {Hui, Pan and Crowcroft, Jon and Yoneki, Eiko},
- *	Booktitle = {MobiHoc '08: Proceedings of the 9th ACM international symposium 
+ *	Booktitle = {MobiHoc '08: Proceedings of the 9th ACM international symposium
  *		on Mobile ad hoc networking and computing},
  *	Doi = {http://doi.acm.org/10.1145/1374618.1374652},
  *	Isbn = {978-1-60558-073-9},
@@ -41,34 +36,35 @@ import core.*;
  *	Year = {2008}
  * }
  * </pre>
- * 
+ *
  * @author PJ Dillon, University of Pittsburgh
  * @see AvgDegreeCentrality
  * @see Centrality
  */
 public class DegreeCentrality implements Centrality {
-	public DegreeCentrality(Settings s) {
-	}
+    public DegreeCentrality(Settings s) {
+    }
 
-	public DegreeCentrality(DegreeCentrality proto) {
-	}
+    public DegreeCentrality(DegreeCentrality proto) {
+    }
 
-	public double getGlobalCentrality(Map<DTNHost, List<Duration>> connHistory) {
-		return connHistory.size();
-	}
+    public double getGlobalCentrality(Map<DTNHost, List<Duration>> connHistory) {
+        return connHistory.size();
+    }
 
-	public double getLocalCentrality(Map<DTNHost, List<Duration>> connHistory,
-			CommunityDetection cd) {
-		int centrality = 0;
-		for (DTNHost h : connHistory.keySet()) {
-			if (cd.isHostInCommunity(h))
-				centrality++;
-		}
-		return centrality;
-	}
+    public double getLocalCentrality(Map<DTNHost, List<Duration>> connHistory,
+                                     CommunityDetection cd) {
+        int centrality = 0;
+        for (DTNHost h : connHistory.keySet()) {
+            if (cd.isHostInCommunity(h))
+                centrality++;
+        }
+        return centrality;
+    }
 
-	public Centrality replicate() {
-		return new DegreeCentrality(this);
-	}
+    public Centrality replicate() {
+        return new DegreeCentrality(this);
+    }
 
 }
+

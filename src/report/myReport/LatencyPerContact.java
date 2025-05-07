@@ -1,6 +1,7 @@
-package report;
+package report.myReport;
 
 import core.*;
+import report.Report;
 
 import java.util.*;
 

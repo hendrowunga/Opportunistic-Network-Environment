@@ -2,7 +2,7 @@
  * Copyright 2024 [Your Name/Organization]
  * Released under [License, e.g., GPLv3]
  */
-package report;
+package report.myReport;
 
 import java.util.*;
 import core.DTNHost;
@@ -10,6 +10,7 @@ import core.Settings;
 import core.SimClock;
 import core.SimScenario;
 import core.UpdateListener;
+import report.Report;
 
 /**
  * Kelas ini menghasilkan laporan tentang penggunaan buffer setiap node dalam simulasi DTN.
