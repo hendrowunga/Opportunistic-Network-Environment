@@ -53,8 +53,8 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 	private static final String TEXT_FFW = "enable/disable fast forward";
 	private static final String TEXT_UP_CHOOSER = "GUI update:";
 	private static final String TEXT_SCREEN_SHOT = "screen shot";
-	private static final String TEXT_SIMTIME = "Simulation time - "+
-		"click to force update, right click to change format";
+	private static final String TEXT_SIMTIME = "Simulation time - " +
+			"click to force update, right click to change format";
 	private static final String TEXT_SEPS = "simulated seconds per second";
 
 	// "simulated events per second" averaging time (milliseconds)
@@ -63,7 +63,7 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 	private static final String SCREENSHOT_FILE = "screenshot";
 
 	private JTextField simTimeField;
-	private JLabel sepsField;	// simulated events per second field
+	private JLabel sepsField; // simulated events per second field
 	private JButton playButton;
 	private JButton playUntilButton;
 	private boolean paused;
@@ -80,8 +80,8 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 	 * GUI update speeds. Negative values -> how many 1/10 seconds to wait
 	 * between updates. Positive values -> show every Nth update
 	 */
-	public static final String[] UP_SPEEDS = {"-10", "-1", "0.1", "1", "10",
-		"100", "1000", "10000", "100000"};
+	public static final String[] UP_SPEEDS = { "-10", "-1", "0.1", "1", "10",
+			"100", "1000", "10000", "100000" };
 
 	/** Smallest value for the zoom level */
 	public static final double ZOOM_MIN = 0.001;
@@ -126,7 +126,7 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 		this.simTimeField.setColumns(6);
 		this.simTimeField.setEditable(false);
 		this.simTimeField.setToolTipText(TEXT_SIMTIME);
-		this.simTimeField.addMouseListener(new MouseAdapter(){
+		this.simTimeField.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON3) {
 					useHourDisplay = !useHourDisplay;
@@ -170,13 +170,11 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 		this.screenShotButton.addActionListener(this);
 	}
 
-
 	private ImageIcon createImageIcon(String path) {
-		java.net.URL imgURL = getClass().getResource(PATH_GRAPHICS+path);
-		
+		java.net.URL imgURL = getClass().getResource(PATH_GRAPHICS + path);
+
 		return new ImageIcon(imgURL);
 	}
-
 
 	private JButton addButton(String iconPath, String tooltip) {
 		JButton button = new JButton(createImageIcon(iconPath));
@@ -188,13 +186,14 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 
 	/**
 	 * Sets the simulation time that control panel shows
+	 * 
 	 * @param time The time to show
 	 */
 	public void setSimTime(double time) {
 		long timeSinceUpdate = System.currentTimeMillis() - this.lastUpdate;
 
 		if (timeSinceUpdate > EPS_AVG_TIME) {
-			double val = ((time - this.lastSimTime) * 1000)/timeSinceUpdate;
+			double val = ((time - this.lastSimTime) * 1000) / timeSinceUpdate;
 			String sepsValue = String.format("%.2f 1/s", val);
 
 			this.sepsField.setText(sepsValue);
@@ -203,8 +202,8 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 		}
 
 		if (this.useHourDisplay) {
-			int hours = (int)(time / 3600);
-			int mins = (int)((time - hours * 3600) / 60);
+			int hours = (int) (time / 3600);
+			int mins = (int) ((time - hours * 3600) / 60);
 			double secs = time % 60;
 			this.simTimeField.setText(String.format("%02d:%02d:%02.1f",
 					hours, mins, secs));
@@ -215,6 +214,7 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 
 	/**
 	 * Sets simulation to pause or play.
+	 * 
 	 * @param paused If true, simulation is put to pause
 	 */
 	public void setPaused(boolean paused) {
@@ -226,8 +226,7 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 				// playUntilTime passed -> disable it
 				this.playUntilTime = Double.MAX_VALUE;
 			}
-		}
-		else {
+		} else {
 			this.playButton.setIcon(createImageIcon(ICON_PLAY));
 			this.playButton.setToolTipText(TEXT_PLAY);
 			this.paused = true;
@@ -242,8 +241,7 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 			this.ffwButton.setIcon(createImageIcon(ICON_FFW));
 			this.guiUpdateChooser.setSelectedIndex(oldSpeedIndex);
 			this.ffwButton.setSelected(false);
-		}
-		else {
+		} else {
 			this.oldSpeedIndex = this.guiUpdateChooser.getSelectedIndex();
 			this.guiUpdateChooser.setSelectedIndex(FFW_SPEED_INDEX);
 			this.isFfw = true; // set to FFW
@@ -253,6 +251,7 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 
 	/**
 	 * Has user requested the simulation to be paused
+	 * 
 	 * @return True if pause is requested
 	 */
 	public boolean isPaused() {
@@ -268,6 +267,7 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 
 	/**
 	 * Is fast forward turned on
+	 * 
 	 * @return True if FFW is on, false if not
 	 */
 	public boolean isFfw() {
@@ -276,6 +276,7 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 
 	/**
 	 * Returns the selected update interval of GUI
+	 * 
 	 * @return The update interval (seconds)
 	 */
 	public double getUpdateInterval() {
@@ -284,15 +285,14 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 
 	/**
 	 * Changes the zoom level
+	 * 
 	 * @param delta How much to change the current level (can be negative or
-	 * positive)
+	 *              positive)
 	 */
 	public void changeZoom(int delta) {
-		SpinnerNumberModel model =
-			(SpinnerNumberModel)this.zoomSelector.getModel();
+		SpinnerNumberModel model = (SpinnerNumberModel) this.zoomSelector.getModel();
 		double curZoom = model.getNumber().doubleValue();
-		Number newValue = new Double(curZoom + model.getStepSize().
-				doubleValue() * delta * curZoom * 100);
+		Number newValue = Double.valueOf(curZoom + model.getStepSize().doubleValue() * delta * curZoom * 100);
 
 		if (newValue.doubleValue() < ZOOM_MIN) {
 			newValue = ZOOM_MIN;
@@ -304,34 +304,26 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 		this.updateZoomScale(true);
 	}
 
-
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == this.playButton) {
 			setPaused(!this.paused); // switch pause/play
-		}
-		else if (e.getSource() == this.stepButton) {
+		} else if (e.getSource() == this.stepButton) {
 			setPaused(true);
 			this.step = true;
-		}
-		else if (e.getSource() == this.ffwButton) {
+		} else if (e.getSource() == this.ffwButton) {
 			switchFfw();
-		}
-		else if (e.getSource() == this.playUntilButton) {
+		} else if (e.getSource() == this.playUntilButton) {
 			setPlayUntil();
-		}
-		else if (e.getSource() == this.guiUpdateChooser) {
+		} else if (e.getSource() == this.guiUpdateChooser) {
 			updateUpdateInterval();
-		}
-		else if (e.getSource() == this.screenShotButton) {
+		} else if (e.getSource() == this.screenShotButton) {
 			takeScreenShot();
 		}
 	}
 
-
 	public void stateChanged(ChangeEvent e) {
 		updateZoomScale(true);
 	}
-
 
 	private void setPlayUntil() {
 		setPaused(true);
@@ -344,32 +336,30 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 			setPaused(false);
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(gui.getParentFrame(),
-					"Invalid number '" + value+"'",
-					"error",JOptionPane.ERROR_MESSAGE);
+					"Invalid number '" + value + "'",
+					"error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
-
 	private void updateUpdateInterval() {
-		String selString = (String)this.guiUpdateChooser.getSelectedItem();
+		String selString = (String) this.guiUpdateChooser.getSelectedItem();
 		this.guiUpdateInterval = Double.parseDouble(selString);
 	}
 
 	/**
 	 * Updates zoom scale to the one selected by zoom chooser
+	 * 
 	 * @param centerView If true, the center of the viewport should remain
-	 * the same
+	 *                   the same
 	 */
 	private void updateZoomScale(boolean centerView) {
-		double scale = ((SpinnerNumberModel)zoomSelector.getModel()).
-			getNumber().doubleValue();
+		double scale = ((SpinnerNumberModel) zoomSelector.getModel()).getNumber().doubleValue();
 
 		if (centerView) {
 			Coord center = gui.getCenterViewCoord();
 			this.pf.setScale(scale);
 			gui.centerViewAt(center);
-		}
-		else {
+		} else {
 			this.pf.setScale(scale);
 		}
 	}
@@ -386,11 +376,10 @@ public class GUIControls extends JPanel implements ActionListener, ChangeListene
 						this.pf.getHeight(), BufferedImage.TYPE_INT_RGB);
 				Graphics2D g2 = i.createGraphics();
 
-				this.pf.paint(g2);	// paint playfield to buffered image
+				this.pf.paint(g2); // paint playfield to buffered image
 				ImageIO.write(i, SCREENSHOT_FILE_TYPE, file);
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			JOptionPane.showMessageDialog(gui.getParentFrame(),
 					"screenshot failed (problems with output file?)",
 					"Exception", JOptionPane.ERROR_MESSAGE);

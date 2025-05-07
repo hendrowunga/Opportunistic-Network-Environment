@@ -28,6 +28,7 @@ public class BinaryEventsReader implements ExternalEventsReader {
 
 	/**
 	 * Constructor.
+	 * 
 	 * @param eventsFile The file where the events are read
 	 */
 	public BinaryEventsReader(File eventsFile) {
@@ -35,7 +36,7 @@ public class BinaryEventsReader implements ExternalEventsReader {
 			FileInputStream fis = new FileInputStream(eventsFile);
 			in = new ObjectInputStream(fis);
 			// first object should tell the amount of events
-			eventsLeft = (Integer)in.readObject();
+			eventsLeft = (Integer) in.readObject();
 		} catch (IOException e) {
 			throw new SimError(e);
 		} catch (ClassNotFoundException e) {
@@ -47,6 +48,7 @@ public class BinaryEventsReader implements ExternalEventsReader {
 
 	/**
 	 * Read events from a binary file created with storeBinaryFile method
+	 * 
 	 * @param nrof Maximum number of events to read
 	 * @return Events in an ArrayList (empty list if didn't read any)
 	 * @see #storeToBinaryFile(String, List)
@@ -59,8 +61,8 @@ public class BinaryEventsReader implements ExternalEventsReader {
 		}
 
 		try {
-			for (int i=0; i < nrof && eventsLeft > 0; i++) {
-				events.add((ExternalEvent)in.readObject());
+			for (int i = 0; i < nrof && eventsLeft > 0; i++) {
+				events.add((ExternalEvent) in.readObject());
 				eventsLeft--;
 			}
 			if (eventsLeft == 0) {
@@ -74,6 +76,7 @@ public class BinaryEventsReader implements ExternalEventsReader {
 
 	/**
 	 * Checks if the given file is a binary external events file
+	 * 
 	 * @param file The file to check
 	 * @return True if the file is a binary ee file, false if not
 	 */
@@ -87,8 +90,7 @@ public class BinaryEventsReader implements ExternalEventsReader {
 			BinaryEventsReader r = new BinaryEventsReader(file);
 			r.readEvents(1);
 			r.close();
-		}
-		catch (SimError e) {
+		} catch (SimError e) {
 			return false; // read failed -> not a valid file
 		}
 
@@ -97,8 +99,9 @@ public class BinaryEventsReader implements ExternalEventsReader {
 
 	/**
 	 * Stores the events to a binary file
+	 * 
 	 * @param fileName Path to the file where the events are stored
-	 * @param events List of events to store
+	 * @param events   List of events to store
 	 * @throws IOException if something in storing went wrong
 	 */
 	public static void storeToBinaryFile(String fileName,
@@ -114,7 +117,7 @@ public class BinaryEventsReader implements ExternalEventsReader {
 		out = new ObjectOutputStream(fos);
 
 		// store the number of events
-		out.writeObject(new Integer(events.size()));
+		out.writeObject(Integer.valueOf(events.size()));
 
 		// store events
 		for (ExternalEvent ee : events) {
@@ -127,8 +130,7 @@ public class BinaryEventsReader implements ExternalEventsReader {
 	public void close() {
 		try {
 			this.in.close();
-		}
-		catch (IOException ioe) {
+		} catch (IOException ioe) {
 			throw new SimError(ioe);
 		}
 	}

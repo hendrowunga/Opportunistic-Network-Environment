@@ -16,7 +16,7 @@ import core.UpdateListener;
  * The number of contacts during an inter-contact time metric is similar to
  * the inter-contact times metric, except that instead of measuring the time
  * until a node meets again, we count the number of other nodes both of the
- * nodes meet separately.  In contrast to the inter-contact times, the number
+ * nodes meet separately. In contrast to the inter-contact times, the number
  * of contacts during an inter-contact is not symmetric, i.e. during an
  * inter-contact both nodes wait the exact same time but will meet a different
  * number of nodes.
@@ -24,7 +24,7 @@ import core.UpdateListener;
  * @author Frans Ekman
  */
 public class ContactsDuringAnICTReport extends Report
-	implements ConnectionListener, UpdateListener {
+		implements ConnectionListener, UpdateListener {
 
 	private boolean[][] areDisconnected;
 	private int[][] contactCount;
@@ -37,13 +37,11 @@ public class ContactsDuringAnICTReport extends Report
 		init();
 	}
 
-
 	@Override
 	protected void init() {
 		super.init();
 		contactsDuringIC = new LinkedList<Integer>();
 	}
-
 
 	public void hostsConnected(DTNHost host1, DTNHost host2) {
 		if (!updateHasBeenCalled) {
@@ -54,8 +52,8 @@ public class ContactsDuringAnICTReport extends Report
 		if (areDisconnected[id1][id2]) {
 			areDisconnected[id1][id2] = false;
 			areDisconnected[id2][id1] = false;
-			contactsDuringIC.add(new Integer(contactCount[id1][id2]));
-			contactsDuringIC.add(new Integer(contactCount[id2][id1]));
+			contactsDuringIC.add(Integer.valueOf(contactCount[id1][id2]));
+			contactsDuringIC.add(Integer.valueOf(contactCount[id2][id1]));
 			contactCount[id1][id2] = 0;
 			contactCount[id2][id1] = 0;
 		}
@@ -67,7 +65,7 @@ public class ContactsDuringAnICTReport extends Report
 
 	private void incContactForAllDisconnectedNodes(DTNHost host) {
 		int id = host.getAddress();
-		for (int i=0; i<contactCount[id].length; i++) {
+		for (int i = 0; i < contactCount[id].length; i++) {
 			if (areDisconnected[id][i]) {
 				contactCount[id][i]++;
 			}
@@ -92,15 +90,15 @@ public class ContactsDuringAnICTReport extends Report
 
 	@Override
 	public void done() {
-		Integer[] contacts = (Integer[])contactsDuringIC.toArray(new Integer[0]);
+		Integer[] contacts = (Integer[]) contactsDuringIC.toArray(new Integer[0]);
 		Arrays.sort(contacts);
 
 		int count = 0;
 		int last = 0;
-		for (int i=0; i<contacts.length; i++) {
+		for (int i = 0; i < contacts.length; i++) {
 			if (contacts[i].intValue() == last) {
 				count++;
-				if (i == contacts.length -1) {
+				if (i == contacts.length - 1) {
 					write(last + "\t" + count);
 				}
 			} else {
