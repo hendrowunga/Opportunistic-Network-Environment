@@ -1,0 +1,20 @@
+Message stats for scenario ProphetOriginal_TTL100_Beta0.25
+sim_time: 216000.0000
+created: 7285
+started: 87281
+relayed: 75108
+aborted: 12172
+dropped: 78607
+removed: 0
+delivered: 2851
+delivery_prob: 0.3914
+response_prob: 0.0000
+overhead_ratio: 25.3444
+latency_avg: 3587.2178
+latency_med: 3773.0000
+hopcount_avg: 2.1217
+hopcount_med: 2
+buffertime_avg: 2527.6327
+buffertime_med: 2081.0000
+rtt_avg: NaN
+rtt_med: NaN
