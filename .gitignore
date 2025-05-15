@@ -21,13 +21,7 @@ desktop.ini
 hs_err_pid*
 replay_pid*
 
-# Gradle build directory & caches
-/build/
-.gradle/
-.gradle/**/caches/
-.gradle/**/daemon/
-.gradle/**/taskHistory/
-.gradle/**/gradleApp/
+
 
 ## Gradle wrapper files
 #gradle/wrapper/gradle-wrapper.jar
@@ -62,17 +56,7 @@ nbproject/private/
 # Windows Explorer thumbnail cache
 Thumbs.db
 
-# ========== SIMULATION / REPORT FILES ==========
-# Simulation report files
-reports/*.txt
-reports/epidemic/*.txt
-reports/prophet/manusia/*.txt
-reports/prophet/randomwaypoint/*.txt
-reports/sprayandwait/manusia/*.txt
-reports/sprayandwait/randomwaypoint/*.txt
-reports/epidemic/manusia/*.txt
-reports/epidemic/randomwaypoint/*.txt
-config/*/*.txt
+
 
 # Javadoc
 *.html
@@ -80,8 +64,4 @@ doc/stylesheet.css
 doc/resources/*.gif
 doc/package-list
 
-# Ignore Gradle project-specific cache directory
-.gradle
 
-# Ignore Gradle build output directory
-build
