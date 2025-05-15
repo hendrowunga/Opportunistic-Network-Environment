@@ -38,7 +38,6 @@ public class BusControlSystem {
 	/**
 	 * Creates a new instance of BusControlSystem without any travelers or
 	 * busses
-	 * 
 	 * @param systemID The unique ID of this system.
 	 */
 	private BusControlSystem(int systemID) {
@@ -54,18 +53,20 @@ public class BusControlSystem {
 	 * Called by busses belonging to this system every time the bus has stopped.
 	 * It calls every passengers enterBus() method so that the passengers can
 	 * enter the bus if they want to.
-	 * 
-	 * @param busID    Unique identifier of the bus
-	 * @param busStop  Coordinates of the bus stop
+	 * @param busID Unique identifier of the bus
+	 * @param busStop Coordinates of the bus stop
 	 * @param nextPath The path to the next stop
 	 */
 	public void busHasStopped(int busID, Coord busStop, Path nextPath) {
-		Iterator<BusTravellerMovement> iterator = travellers.values().iterator();
+		Iterator<BusTravellerMovement> iterator = travellers.values().
+			iterator();
 		while (iterator.hasNext()) {
-			BusTravellerMovement traveller = (BusTravellerMovement) iterator.next();
+			BusTravellerMovement traveller = (BusTravellerMovement)iterator.
+				next();
 			if (traveller.getLocation() != null) {
 				if ((traveller.getLocation()).equals(busStop)) {
-					if (traveller.getState() == BusTravellerMovement.STATE_WAITING_FOR_BUS) {
+					if (traveller.getState() == BusTravellerMovement.
+							STATE_WAITING_FOR_BUS) {
 						Path path = new Path(nextPath);
 						traveller.enterBus(path);
 					}
@@ -78,12 +79,11 @@ public class BusControlSystem {
 	 * Returns a reference to a BusControlSystem with ID provided as parameter.
 	 * If a system does not already exist with the requested ID, a new one is
 	 * created.
-	 * 
 	 * @param systemID unique ID of the system
 	 * @return The bus control system with the provided ID
 	 */
 	public static BusControlSystem getBusControlSystem(int systemID) {
-		Integer id = Integer.valueOf(systemID);
+		Integer id = new Integer(systemID);
 
 		if (systems.containsKey(id)) {
 			return systems.get(id);
@@ -96,7 +96,6 @@ public class BusControlSystem {
 
 	/**
 	 * Registers a bus to be part of a bus control system
-	 * 
 	 * @param bus The bus to register
 	 */
 	public void registerBus(BusMovement bus) {
@@ -105,7 +104,6 @@ public class BusControlSystem {
 
 	/**
 	 * Registers a traveller/passenger to be part of a bus control system
-	 * 
 	 * @param traveller The traveller to register
 	 */
 	public void registerTraveller(BusTravellerMovement traveller) {
@@ -114,7 +112,6 @@ public class BusControlSystem {
 
 	/**
 	 * Provide the system with the map
-	 * 
 	 * @param map
 	 */
 	public void setMap(SimMap map) {
@@ -123,7 +120,6 @@ public class BusControlSystem {
 
 	/**
 	 * Get the underlying map of the system
-	 * 
 	 * @return The map
 	 */
 	public SimMap getMap() {
@@ -139,7 +135,6 @@ public class BusControlSystem {
 
 	/**
 	 * Set the bus stops that belong to this system
-	 * 
 	 * @param busStops
 	 */
 	public void setBusStops(List<Coord> busStops) {

@@ -42,7 +42,6 @@ public class WaveRouter extends ActiveRouter {
 	/**
 	 * Constructor. Creates a new message router based on the settings in
 	 * the given Settings object.
-	 * 
 	 * @param s The settings object
 	 */
 	public WaveRouter(Settings s) {
@@ -53,7 +52,6 @@ public class WaveRouter extends ActiveRouter {
 
 	/**
 	 * Copy constructor.
-	 * 
 	 * @param r The router prototype where setting values are copied from
 	 */
 	protected WaveRouter(WaveRouter r) {
@@ -92,20 +90,23 @@ public class WaveRouter extends ActiveRouter {
 		for (Message m : messages) {
 			Double custodyStartTime = this.custodyMessages.get(m.getId());
 			if (custodyStartTime != null) {
-				if (SimClock.getTime() > custodyStartTime + immunityTime * custodyFraction) {
+				if (SimClock.getTime() >
+					custodyStartTime + immunityTime * custodyFraction) {
 					this.custodyMessages.remove(m.getId()); /* time passed */
 				} else {
 					continue; /* skip messages that still have custody */
 				}
 			}
 
+
 			if (excludeMsgBeingSent && isSending(m.getId())) {
 				continue; /* skip the message(s) that router is sending */
 			}
 
-			if (oldest == null) {
+			if (oldest == null ) {
 				oldest = m;
-			} else if (oldest.getReceiveTime() > m.getReceiveTime()) {
+			}
+			else if (oldest.getReceiveTime() > m.getReceiveTime()) {
 				oldest = m;
 			}
 		}
@@ -132,7 +133,7 @@ public class WaveRouter extends ActiveRouter {
 	public Message messageTransferred(String id, DTNHost from) {
 		Message m = super.messageTransferred(id, from);
 		/* store received message IDs for immunity */
-		this.recentMessages.put(m.getId(), Double.valueOf(SimClock.getTime()));
+		this.recentMessages.put(m.getId(), new Double(SimClock.getTime()));
 		this.custodyMessages.put(id, SimClock.getTime());
 		return m;
 	}

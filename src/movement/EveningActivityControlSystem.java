@@ -25,17 +25,18 @@ public class EveningActivityControlSystem {
 
 	private Random rng;
 
-	private static HashMap<Integer, EveningActivityControlSystem> controlSystems;
+	private static HashMap<Integer, EveningActivityControlSystem>
+		controlSystems;
 
 	static {
-		DTNSim.registerForReset(EveningActivityControlSystem.class.getCanonicalName());
+		DTNSim.registerForReset(EveningActivityControlSystem.class.
+				getCanonicalName());
 		reset();
 	}
 
 	/**
 	 * Creates a new instance of EveningActivityControlSystem without any nodes
 	 * or meeting spots, with the ID given as parameter
-	 * 
 	 * @param id
 	 */
 	private EveningActivityControlSystem(int id) {
@@ -48,17 +49,15 @@ public class EveningActivityControlSystem {
 
 	/**
 	 * Register a evening activity node with the system
-	 * 
 	 * @param eveningMovement activity movement
 	 */
 	public void addEveningActivityNode(EveningActivityMovement eveningMovement) {
-		eveningActivityNodes.put(Integer.valueOf(eveningMovement.getID()),
+		eveningActivityNodes.put(new Integer(eveningMovement.getID()),
 				eveningMovement);
 	}
 
 	/**
 	 * Sets the meeting locations the nodes can choose among
-	 * 
 	 * @param meetingSpots
 	 */
 	public void setMeetingSpots(List<Coord> meetingSpots) {
@@ -69,18 +68,18 @@ public class EveningActivityControlSystem {
 	/**
 	 * This method gets the instruction for a node, i.e. When/where and with
 	 * whom to go.
-	 * 
 	 * @param eveningActivityNodeID unique ID of the node
 	 * @return Instructions object
 	 */
 	public EveningTrip getEveningInstructions(int eveningActivityNodeID) {
 		EveningActivityMovement eveningMovement = eveningActivityNodes.get(
-				Integer.valueOf(eveningActivityNodeID));
+				new Integer(eveningActivityNodeID));
 		if (eveningMovement != null) {
 			int index = eveningActivityNodeID % meetingSpots.size();
 			if (nextTrips[index] == null) {
-				int nrOfEveningMovementNodes = (int) (eveningMovement.getMinGroupSize() +
-						(double) (eveningMovement.getMaxGroupSize() -
+				int nrOfEveningMovementNodes = (int)(eveningMovement.
+						getMinGroupSize() +
+						(double)(eveningMovement.getMaxGroupSize() -
 								eveningMovement.getMinGroupSize()) *
 								rng.nextDouble());
 				Coord loc = meetingSpots.get(index).clone();
@@ -101,7 +100,6 @@ public class EveningActivityControlSystem {
 
 	/**
 	 * Get the meeting spot for the node
-	 * 
 	 * @param id
 	 * @return Coordinates of the spot
 	 */
@@ -111,9 +109,9 @@ public class EveningActivityControlSystem {
 		return loc;
 	}
 
+
 	/**
 	 * Sets the random number generator to be used
-	 * 
 	 * @param rand
 	 */
 	public void setRandomNumberGenerator(Random rand) {
@@ -124,17 +122,17 @@ public class EveningActivityControlSystem {
 	 * Returns a reference to a EveningActivityControlSystem with ID provided as
 	 * parameter. If a system does not already exist with the requested ID, a
 	 * new one is created.
-	 * 
 	 * @param id unique ID of the EveningActivityControlSystem
 	 * @return The EveningActivityControlSystem with the provided ID
 	 */
 	public static EveningActivityControlSystem getEveningActivityControlSystem(
 			int id) {
-		if (controlSystems.containsKey(Integer.valueOf(id))) {
-			return controlSystems.get(Integer.valueOf(id));
+		if (controlSystems.containsKey(new Integer(id))) {
+			return controlSystems.get(new Integer(id));
 		} else {
-			EveningActivityControlSystem scs = new EveningActivityControlSystem(id);
-			controlSystems.put(Integer.valueOf(id), scs);
+			EveningActivityControlSystem scs =
+				new EveningActivityControlSystem(id);
+			controlSystems.put(new Integer(id), scs);
 			return scs;
 		}
 	}
